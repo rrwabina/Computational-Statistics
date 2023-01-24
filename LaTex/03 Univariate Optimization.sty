@@ -1,0 +1,395 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Beamer Presentation
+% LaTeX Template
+% Version 1.0 (10/11/12)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND THEMES
+%----------------------------------------------------------------------------------------
+
+\documentclass[9pt]{beamer}
+
+\mode<presentation> {
+
+% The Beamer class comes with a number of default slide themes
+% which change the colors and layouts of slides. Below this is a list
+% of all the themes, uncomment each in turn to see what they look like.
+
+%\usetheme{default}
+%\usetheme{AnnArbor}
+%\usetheme{Antibes}
+%\usetheme{Bergen}
+%\usetheme{Berkeley}
+%\usetheme{Berlin}
+%\usetheme{Boadilla}
+%\usetheme{CambridgeUS}
+%\usetheme{Copenhagen}
+%\usetheme{Darmstadt}
+%\usetheme{Dresden}
+%\usetheme{Frankfurt}
+%\usetheme{Goettingen}
+%\usetheme{Hannover}
+%\usetheme{Ilmenau}
+%\usetheme{JuanLesPins}
+%\usetheme{Luebeck}
+%\usetheme{Madrid}
+%\usetheme{Malmoe}
+%\usetheme{Marburg}
+%\usetheme{Montpellier}
+%\usetheme{PaloAlto}
+%\usetheme{Pittsburgh}
+%\usetheme{Rochester}
+%\usetheme{Singapore}
+%\usetheme{Szeged}
+%\usetheme{Warsaw}
+
+% As well as themes, the Beamer class has a number of color themes
+% for any slide theme. Uncomment each of these in turn to see how it
+% changes the colors of your current slide theme.
+
+%\usecolortheme{albatross}
+%\usecolortheme{beaver}
+%\usecolortheme{beetle}
+%\usecolortheme{crane}
+%\usecolortheme{dolphin}
+%\usecolortheme{dove}
+%\usecolortheme{fly}
+%\usecolortheme{lily}
+%\usecolortheme{orchid}
+%\usecolortheme{rose}
+%\usecolortheme{seagull}
+%\usecolortheme{seahorse}
+\usecolortheme{whale}
+%\usecolortheme{wolverine}
+
+%\setbeamertemplate{footline} % To remove the footer line in all slides uncomment this line
+%\setbeamertemplate{footline}[page number] % To replace the footer line in all slides with a simple slide count uncomment this line
+%\setbeamertemplate{navigation symbols}{} % To remove the navigation symbols from the bottom of all slides uncomment this line
+}
+\usefonttheme{professionalfonts}
+\usepackage{tcolorbox}
+\usepackage{etoolbox}
+\usepackage{ragged2e}
+\usepackage{graphicx} % Allows including images
+\usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
+\usepackage{lipsum} 
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\title[Optimization]{Univariate Optimization}
+\author{DS321: Computational Statistics} 
+\institute[USTP]
+    {University of Science and Technology of the Philippines
+    \medskip \\
+    \textbf{ROMEN SAMUEL WABINA, MSc} \\
+    \text{MSc Data Science and Artificial Intelligence} \\
+    \text{\textit{ongoing} PhD Data Science in Healthcare and Clinical Informatics} \\
+    \text{romensamuel@gmail.com}}
+\date{February 06, 2023} 
+
+\apptocmd{\frame}{}{\justifying}{}
+\newcommand\Fontvi{\fontsize{12}{7.2}\selectfont}
+
+\begin{document}
+
+\begin{frame}
+\Fontvi
+\titlepage % Print the title page as the first slide
+\end{frame}
+%------------------------------------------------
+\begin{frame}
+\frametitle{Overview} 
+\tableofcontents
+\end{frame}
+%------------------------------------------------
+%----------------------------------------------------------------------------------------
+%	PRESENTATION SLIDES
+%----------------------------------------------------------------------------------------
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+%----------------------------------------------------------------------------------------
+\begin{frame}
+\section{Overview}
+\frametitle{Overview} 
+\textbf{Most real-world functions cannot be optimized analytically.} For example, maximizing $$g(x) = \frac{\log{x}}{1 + x}$$ with respect to $x$ by setting the derivative equal to zero and solving for $x$ leads to an algebraic impasse because $$1 + \frac{1}{x} − \log{x} = 0$$ has no analytic solution. Many realistic statistical models induce likelihoods that cannot be optimized analytically—indeed, we would argue that greater realism is strongly
+associated with reduced ability to find optima analytically.
+\end{frame}
+%------------------------------------------------
+\section{Univariate Optimization}
+\begin{frame}
+\frametitle{Univariate Optimization}
+A simple univariate numerical optimization problem that we will discuss throughout this section is to \textbf{maximize functions}, say $$g(x) = \frac{\log{x}}{1+x}$$ with respect to $x$. 
+\\~\\
+Since no analytic solution can be found, we resort to \textbf{iterative methods} that rely on \textbf{successive approximation of the solution}. It might be reasonable to use $x(0) = 3.0$ as an initial guess, or starting value, for an iterative procedure. 
+\\~\\
+An updating equation will be used to produce an improved guess, $x^{(t+1)}$, from the most recent value $x(t)$, for $t = 0, 1, 2, \hdots $ until iterations are stopped. The update may be
+based on an attempt to find the root of $$g^{'}(x) = \frac{1+1/x-\log{x}}{(1+x)^2}$$ or on some other rationale.
+\end{frame}
+%------------------------------------------------
+\begin{frame}
+\frametitle{Univariate Optimization}
+\begin{figure}
+\includegraphics[width = 0.9\linewidth]{root.PNG}
+\caption{Given a function $f(x)$, how can we find $x$ so that $f(x) = 0$}
+\end{figure}
+\end{frame}
+%------------------------------------------------
+\section{Bisection Method}
+\begin{frame}
+\frametitle{Univariate Optimization: \textit{Bisection Method}}
+The \textbf{bisection method} illustrates the main components of iterative root-finding procedures. It is primarily used \textbf{to find the roots of a polynomial equation}.
+
+\begin{tcolorbox}[colback = blue!5, colframe = blue!40!black, title = Bisection Method]
+If $g'$ is continuous on $[a_0, b_0]$ and $g'(a_0)g'(b_0) \leq 0$, then the intermediate value theorem implies that there exists at least one $x^* \in [a_0, b_0]$ for which $g'(x^*)=0$ and hence $x^*$ is a local optimum of $g$. 
+\end{tcolorbox}
+\\~\\
+It works by narrowing the gap between the positive and negative intervals until it closes in on the correct answer.
+\\~\\
+To find it, the bisection method systematically shrinks the interval from $[a_0, b_0]$ to $[a_1, b_1]$ to $[a_2, b_2]$ and so on,
+where $[a0, b0] \supset [a1, b1] \supset [a2, b2] \supset  \hdots$ and so forth. 
+\end{frame}
+%------------------------------------------------
+\begin{frame}
+\frametitle{Univariate Optimization: \textit{Bisection Method}}
+\begin{figure}
+\includegraphics[width = 0.5\linewidth]{Bisection_method.PNG}
+\caption{Bisection Method works by narrowing the gap between the positive and negative intervals until it closes in on the correct answer.}
+\end{figure}
+\end{frame}
+%------------------------------------------------
+\begin{frame}
+\frametitle{Univariate Optimization: \textit{Bisection Method}}
+\textbf{Theoretical Example: A Simple Univariate Optimization}
+To find the value of $x$ maximizing $$g(x) = \frac{\log{x}}{1+x},$$ we might take $a_0 = 1$, $b_0 = 5$, and $x^{(0)}=3$.
+\\~\\
+Suppose the true maximum of $g(x)$ with respect to $x$ is achieved at $x^{\ast}$. The updating equation of any iterative procedure should be designed to encourage $x(t) \rightarrow x^{\ast}$ as $t$ increases. However, \textbf{there is no guarantee that $x(t)$ will converge to anything, let alone to $x^{\ast}$.}
+\end{frame}
+%------------------------------------------------
+\begin{frame}
+\frametitle{Univariate Problems: \textit{Bisection Method}}
+
+\begin{tcolorbox}[colback = blue!5, colframe = blue!40!black, title = Bisection Method]
+The bisection method is an approximation method to find the roots of the given equation by repeatedly dividing the interval. This method will divide the interval until the resulting interval is found, which is extremely small.
+\end{tcolorbox}
+
+\\~\\
+Follow the below procedure to get the solution for the continuous function. \textbf{For any continuous function $f(x)$},
+\begin{enumerate}
+    \item{Find two points, say $a$ and $b$ such that $a < b$ and $f(a) * f(b) < 0$} 
+    \item{Find the midpoint of $a$ and $b$, say $t$}
+    \item{The $t$ is the root of the given function if $f(t) = 0$; else follow the next step}
+    \item{Divide the interval $[a, b]$. If $f(t)*f(a) < 0$, there exist a root between $t$ and $a$ – else if $f(t)*f(b) < 0$, there exist a root between $t$ and $b$}
+    \item{Repeat above three steps until $f(t) = 0$}
+\end{enumerate}
+\end{frame}
+%------------------------------------------------
+\subsection{BM Example 1}
+\begin{frame}
+\frametitle{Univariate Optimization: \textit{Bisection Method Example 1}}
+\begin{tcolorbox}[colback = blue!5, colframe = blue!40!black, title = BM Example 1]
+\textbf{Question 1}: Determine the root of the given equation $x^2-3 = 0$ for $x \in [1, 2]$ \\ 
+\end{tcolorbox}
+\\~\\
+\textbf{Solution}: Let $f(x) = x^2 - 3$. Now, find the value of $f(x)$ at $a = 1$ and $b = 2$.
+\begin{itemize}
+    \item{$f(x=1)=1^2-3 = -2 < 0$}
+    \item{$f(x=2)=2^2-3 =  1 > 0$}
+\end{itemize}
+\\~\\
+The given function is continuous, and the root lies in the interval $[1, 2]$. Let $t$ be the midpoint of the interval, i.e., $t = (1+2)/2 = 1.5$.
+\\~\\
+Therefore, the value of the function at $t = 1.5$ is $$f(t)=f(1.5)=-0.75<0$$. \\
+If $f(t) < 0$, assume $a = t$ and if $f(t) > 0$, assume $b = t$.
+\\~\\
+Since $f(t) < 0$, so $a$ is replaced with $t = 1.5$ for the next iterations.
+\end{frame}
+%------------------------------------------------
+\begin{frame}
+\frametitle{Univariate Optimization: \textit{Bisection Method Example 1}}
+\textbf{Question 1}: Determine the root of the given equation $x^2-3 = 0$ for $x \in [1, 2]$ \\ 
+\\~\\
+\begin{table}
+\begin{tabular}{c l l l l l l}
+\toprule
+\textbf{Iteration} & \textbf{$a$} & \textbf{$b$} & \textbf{$t$} & \textbf{$f(a)$} & \textbf{$f(b)$} & \textbf{$f(t)$}\\
+\midrule
+1 & 1 & 2 & 1.5 & -2 & 1 & -0.75 \\
+2 & 1.5 & 2 & 1.75 & -0.75 & 1 & 0.062 \\
+3 & 1.5 & 1.75 & 1.625 & -0.75 & 0.0625 & -0.359 \\
+4 & 1.625 & 1.75 & 1.6875 & -0.3594 & 0.0625 & -0.1523 \\
+5 & 1.6875 & 1.75 & 1.7188 & -0.1523 & 0.0625 & -0.0457 \\
+6 & 1.7188 & 1.75 & 1.7344 & -0.0457 & 0.0625 & 0.0081 \\
+7 & 1.7188 & 1.7344 & 1.7266 & -0.0457 & 0.0081 & -0.0189 \\
+\bottomrule
+\end{tabular}
+\end{table}
+So, at the seventh iteration, we get the final interval $[1.7266, 1.7344]$. Hence, \textbf{1.7344 is the approximated solution}.
+\end{frame}
+%------------------------------------------------
+\subsection{BM Example 2}
+\begin{frame}
+\frametitle{Univariate Optimization: \textit{Bisection Method Example 2}}
+\begin{tcolorbox}[colback = blue!5, colframe = blue!40!black, title = BM Example 2]
+Solve with bisection:
+\begin{equation*}
+    x - x^{1/3} - 2 = 0
+\end{equation*}
+\end{tcolorbox}
+
+\vspace{2ex}
+\begin{center}
+  \small
+  \renewcommand{\arraystretch}{1.3}
+    \begin{tabular}{clllr}
+     $k$ & \multicolumn{1}{c}{$a$}
+         & \multicolumn{1}{c}{$b$}
+         &  \multicolumn{1}{c}{$x_{mid}$}
+         & \multicolumn{1}{c}{$f(x_{mid})$} \\ \hline
+      0 &  3           & 4          &             &             \\
+      1 &  3           & 4          & 3.5         & -0.01829449 \\
+      2 &  3.5         & 4          & 3.75        &  0.19638375 \\
+      3 &  3.5         & 3.75       & 3.625       &  0.08884159 \\
+      4 &  3.5         & 3.625      & 3.5625      &  0.03522131 \\
+      5 &  3.5         & 3.5625     & 3.53125     &  0.00845016 \\
+      6 &  3.5         & 3.53125    & 3.515625    & -0.00492550 \\
+      7 &  3.51625     & 3.53125    & 3.5234375   &  0.00176150 \\
+      8 &  3.51625     & 3.5234375  & 3.51953125  & -0.00158221 \\
+      9 &  3.51953125  & 3.5234375  & 3.52148438  &  0.00008959 \\
+     10 &  3.51953125  & 3.52148438 & 3.52050781  & -0.00074632 \\
+    \end{tabular}
+\end{center}
+\end{frame}
+%------------------------------------------------
+\begin{frame}
+\frametitle{Univariate Problems: \textit{Bisection Method - Summary}}
+\textbf{Advantages}
+\begin{itemize}
+    \item{If $g'$ is continuous on $[a_0, b_0]$, a root can be found, regardless of the existence, behavior, or ease of deriving $g''$} 
+\end{itemize}
+\textbf{Disadvantages}
+\begin{itemize}
+    \item{Bisection is quite a slow approach: It requires a rather large number of iterations to achieve a desired precision, relative to other methods discussed below} 
+\end{itemize}
+\end{frame}
+%------------------------------------------------
+\section{Newton's Method}
+\begin{frame}
+\frametitle{Univariate Problems: \textit{Newton's Method}}
+\textbf{Newton's Method}
+\\~\\
+An extremely fast root-finding approach is \textbf{Newton’s method} (also known as \textit{Newton-Rhapson iteration}). 
+\\~\\
+Suppose that $g'$ is continuously differentiable and that $g''(x^*) \neq 0$. At iteration $t$, the approach approximates $g'(x^*)$ by the linear Taylor series expansion:
+$$0 = g'(x^*) \approx g'(x^{(t)}) + (x^* - x^{(t)})g''(x^{(t)})$$
+Since $g′$ is approximated by its tangent line at $x(t)$, it seems sensible to approximate the root of $g′$ by the root of the tangent line. Thus, solving for $x^∗$ above, we obtain
+$$ x^* = x^{(t)} - \frac{g'(x^{(t)})}{g''(x^{(t)})} = x^{(t)} + h^{(t)} $$
+This equation describes an approximation to $x^∗$ that depends on the current guess $x(t)$ and a refinement $h(t)$. Iterating this strategy yields the updating equation for Newton’s method:
+$$ x^{(t+1)} = x^{(t)} + h^{(t)} $$
+\end{frame}
+%------------------------------------------------
+\begin{frame}
+\frametitle{Univariate Problems: \textit{Newton's Method}}
+\textbf{Newton's Method (cont.)}
+\\~\\
+This equation describes an approximation to $x^∗$ that depends on the current guess $x(t)$ and a refinement $h(t)$. Iterating this strategy yields the updating equation for Newton’s method:
+$$ x^{(t+1)} = x^{(t)} + h^{(t)} $$
+where $h(t) = \frac{−g'(x(t))}{g''(x(t))}$. The same update can be motivated by analytically solving for the maximum of the quadratic Taylor series approximation to $g(x^{\ast})$, namely $$g(x^{(t)}) + (x^{\ast}-x^{(t)}) g′(x^{(t)}) + (x^{\ast}-x^{(t)})^2 g''(x^{(t)})/2$$ 
+\\~\\
+When the optimization of $g$ corresponds to an MLE problem where $\theta$ is a solution to $l'(\theta) = 0$, the updating equation for Newton’s method is
+$$ \theta^{(t + 1)} = \theta^{(t)} - \frac{l'(\theta^{(t)})}{l''(\theta^{(t)})} $$
+\end{frame}
+%------------------------------------------------
+\begin{frame}
+\frametitle{Univariate Problems: \textit{Newton's Method}}
+\begin{figure}
+\includegraphics[width = 0.8\linewidth]{newtons.JPG}
+\caption{At the first step, Newton’s method approximates $g'$ by its tangent line at $x^{(0)}$, whose root $x^{(1)}$ serves as the next approximation of the true root $x^{\ast}$. The next step similarly yields $x^{(2)}$, which is already quite close to $x^{\ast}$.}
+\end{figure}
+\end{frame}
+%------------------------------------------------
+\subsection{NM Example}
+\begin{frame}
+\frametitle{Univariate Problems: \textit{Newton's Method Example}}
+Let's formalize Newton's Method in this class, let's use this notation:
+$$ x_{n+1}=x_n-\dfrac{f(x_n)}{f'(x_n)} $$
+\\~\\
+\textbf{Consider the function $f(x) = 4 + 8x^2 - x^4$}
+    \begin{enumerate}
+        \item{Find the derivative of $f(x)$ and the second derivative, $f''(x)$.}
+        \item{Find the y-intercept. Determine any maxima or minima and all points of inflection for $f(x)$. Give both the $x$ and $y$ values.}
+        \item{Sketch the graph of $f(x)$. Is this function odd or even or neither?}
+        \item{One of the x-intercepts is near $x = 3$. Use Newton's Method starting with $x_0 = 3$ and performing two iterations to get a good approximation to this x-intercept.}
+    \end{enumerate}
+\end{frame}
+%------------------------------------------------
+\subsection{Convergence Order}
+\begin{frame}
+\frametitle{Univariate Problems: \textit{Convergence Order}}
+\textbf{Order of Convergence}
+\\~\\
+The speed of a root-finding approach like Newton’s method is typically measured by its \textbf{order of convergence}. A method has convergence of order $\beta$ if $\lim_{t \rightarrow \infty}\epsilon^{(t)} = 0$ and 
+$$ lim_{t \rightarrow \infty} \frac{|\epsilon^{(t+1)}|}{|\epsilon^{(t)}|^{\beta}} = c $$
+for some constants $c \neq 0$ and $\beta > 0$. 
+\\~\\
+Higher orders of convergence $\beta$ are better in the sense that precise approximation of the true solution is more quickly achieved. It is not necessary, however, that $\beta$ be an integer. A convergence with order
+\begin{itemize}
+    \item{$\beta = 1$ is called the \textbf{linear convergence} if $c \in (0, 1)$}
+    \item{$\beta = 2$ is called the \textbf{quadratic convergence}}
+    \item{$\beta = 3$ is called the \textbf{cubic convergence}}
+\end{itemize}
+In practice, the rate and order of convergence provide useful insights when using iterative methods for calculating numerical approximations. If the order of convergence is higher, then typically fewer iterations are necessary to yield a useful approximation.
+\end{frame}
+%------------------------------------------------
+\begin{frame}
+\frametitle{Univariate Problems: \textit{Convergence Order}}
+\textbf{Order of Convergence of the Newton's Method}
+According to the Newton's method, $$x_{n+1}=x_n-\dfrac{f(x_n)}{f'(x_n)}$$
+Assume that you have determined by whatever means an interval $[a,b]$ with 
+$$ f(a)<0<f(b);\qquad f'(x)>0, \quad f''(x)>0\quad(a<x<b) $$
+Then $f$ has exactly one zero $\xi \in [a, b]$. Furthermore, it is obvious that the convexity properties of $f$ states that 
+$$ x_0:=b,\qquad x_{n+1}:=x_n-{f(x_n)\over f'(x_n)}\quad(n\geq0)\tag{1} $$
+produces a \textbf{monotonically decreasing} sequence of points $x_n > \xi$. It follows that the $x_n$ converge to some $\xi ' \in [\xi, x_0]$. Letting $n \rightarrow \infty$ in $(1)$ implies that $f(\xi ') = 0$, where $\xi ' = \xi$.
+\\~\\
+In order to analyze the speed of convergence we invoke Taylor's theorem: For each $n \geq 0$, there is an $x^{\ast} \in [\xi, x_n]$ with 
+$$ 0=f(\xi)=f(x_n)+f'(x_n)(\xi-x_n)+{f''(x^*)\over 2!}(\xi-x_n)^2\ $$
+\end{frame}
+%------------------------------------------------
+\begin{frame}
+\frametitle{Univariate Problems: \textit{Convergence Order}}
+\textbf{Order of Convergence of the Newton's Method (cont.)}
+This implies, by definition of $x_{n+1}$, that 
+$$ x_{n+1}-\xi={f''(x^*)\over 2 f'(x_n)}(x_n-\xi)^2\  $$
+Here for large $n$ the first factor on the right hand side is approximately equal to
+$$ C:={f''(\xi)\over 2 f'(\xi)}\ . $$
+This means that for large n we have approximately
+$$ x_{n+1}-\xi\doteq C(x_n-\xi)^2\qquad(n\gg1)\  $$
+Qualitatively this means that with each Newton step the number of correct decimals is about doubled. That is what is meant by \textbf{quadratic convergence}. 
+$$ x_{n+1} \propto C(x_n)^\textbf{2} $$
+\end{frame}
+%------------------------------------------------
+\section{Secant Method}
+\begin{frame}
+\frametitle{Univariate Problems: Secant Method}
+\textbf{Secant Method}
+\\~\\
+The updating increment for Newton’s method relies on the second derivative, $g''(x(t))$. Hence, the Newton's method uses a succession of roots through tangent lines to better approximate a root of a function $f$. However, calculating this derivative is difficult, it might be replaced by the discrete-difference approximation 
+$$ \frac{[g'(x^{(t)}) - g'(x^{(t−1)})]}{(x^{(t)} − x^{(t−1)})} $$
+The result is the \textbf{secant method}, which has the updating equation
+$$ x^{(t+1)} = x^{(t)} - g'(x^{(t)}) \frac{x^{(t)}-x^{(t-1)}}{g'(x^{(t)})-g'(x^{(t-1)})} $$
+for $t \leq 1$. The Secant Method requires two starting points, $x^{(0)}$ and $x^{(1)}$.
+\end{frame}
+%------------------------------------------------
+\end{document}

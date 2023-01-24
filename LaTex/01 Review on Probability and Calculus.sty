@@ -1,0 +1,483 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Beamer Presentation
+% LaTeX Template
+% Version 1.0 (10/11/12)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND THEMES
+%----------------------------------------------------------------------------------------
+
+\documentclass[9pt]{beamer}
+
+\mode<presentation> {
+
+% The Beamer class comes with a number of default slide themes
+% which change the colors and layouts of slides. Below this is a list
+% of all the themes, uncomment each in turn to see what they look like.
+
+%\usetheme{default}
+%\usetheme{AnnArbor}
+%\usetheme{Antibes}
+%\usetheme{Bergen}
+%\usetheme{Berkeley}
+%\usetheme{Berlin}
+%\usetheme{Boadilla}
+%\usetheme{CambridgeUS}
+%\usetheme{Copenhagen}
+%\usetheme{Darmstadt}
+%\usetheme{Dresden}
+%\usetheme{Frankfurt}
+%\usetheme{Goettingen}
+%\usetheme{Hannover}
+%\usetheme{Ilmenau}
+%\usetheme{JuanLesPins}
+%\usetheme{Luebeck}
+%\usetheme{Madrid}
+%\usetheme{Malmoe}
+%\usetheme{Marburg}
+%\usetheme{Montpellier}
+%\usetheme{PaloAlto}
+%\usetheme{Pittsburgh}
+%\usetheme{Rochester}
+%\usetheme{Singapore}
+%\usetheme{Szeged}
+%\usetheme{Warsaw}
+
+% As well as themes, the Beamer class has a number of color themes
+% for any slide theme. Uncomment each of these in turn to see how it
+% changes the colors of your current slide theme.
+
+%\usecolortheme{albatross}
+%\usecolortheme{beaver}
+%\usecolortheme{beetle}
+%\usecolortheme{crane}
+%\usecolortheme{dolphin}
+%\usecolortheme{dove}
+%\usecolortheme{fly}
+%\usecolortheme{lily}
+%\usecolortheme{orchid}
+%\usecolortheme{rose}
+%\usecolortheme{seagull}
+%\usecolortheme{seahorse}
+\usecolortheme{whale}
+%\usecolortheme{wolverine}
+
+%\setbeamertemplate{footline} % To remove the footer line in all slides uncomment this line
+%\setbeamertemplate{footline}[page number] % To replace the footer line in all slides with a simple slide count uncomment this line
+%\setbeamertemplate{navigation symbols}{} % To remove the navigation symbols from the bottom of all slides uncomment this line
+}
+\usefonttheme{professionalfonts}
+\usepackage{tcolorbox}
+\usepackage{etoolbox}
+\usepackage{ragged2e}
+\usepackage{graphicx} % Allows including images
+\usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
+\usepackage{lipsum} 
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\title[Calculus]{Review on Calculus and Linear Algebra}
+\author{DS321: Computational Statistics} 
+\institute[USTP]
+    {University of Science and Technology of the Philippines
+    \medskip \\
+    \\~\\
+    \textbf{ROMEN SAMUEL WABINA, MSc} \\
+    \text{BSc Applied Mathematics in Operations Research | University of the Philippines}
+    \text{MSc Data Science and Artificial Intelligence | Asian Institute of Technology} \\
+    \text{\textit{ongoing} PhD Data Science in Healthcare and Clinical Informatics} \\
+    \text{Faculty of Medicine, Ramathibodi Hospital, Mahidol University} \\
+    \text{romensamuel@gmail.com}}
+\date{February 06, 2023} 
+
+\apptocmd{\frame}{}{\justifying}{}
+\newcommand\Fontvi{\fontsize{12}{7.2}\selectfont}
+
+\begin{document}
+
+\begin{frame}
+\Fontvi
+\titlepage % Print the title page as the first slide
+\end{frame}
+%------------------------------------------------
+% \begin{frame}
+% \frametitle{Overview} 
+% \tableofcontents
+% \end{frame}
+%------------------------------------------------
+%----------------------------------------------------------------------------------------
+%	PRESENTATION SLIDES
+%----------------------------------------------------------------------------------------
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+
+\begin{frame}
+\frametitle{Overview}
+This chapter reviews notation and background material in mathematics, probability, and statistics.
+\begin{enumerate}
+    \item{Mathematical Notation}
+    \item{Statistical Notation and Probability Distributions}
+    \item{Differential and Integral Calculus}
+    \item{Statistical Limit Theory}
+    \item{Computing}
+\end{enumerate}
+\end{frame}
+%------------------------------------------------
+\begin{frame}
+\frametitle{Mathematical Review: Notation}
+We use \textbf{boldface} to distinguish a vector $\mathbf{x} = (x_1, \hdots, x_p)$ or a matrix $\mathbf{M}$ from a scalar variable $x$ or a constant $\mathbf{M}$. A vector-valued function $\mathbf{f}$ evaluated at $x$ is also boldfaced, as in $f(x) = (f_1(x), \hdots , f_p(x))$. The transpose of $\mathbf{M}$ is denoted $\mathbf{M^T}$.
+\\~\\
+All vectors are considered to be column vectors, so, for example, an $n \times p$ matrix can be written as $M = (x_1, \hdots , x_n)^T$. Let $\mathbf{I}$ denote an identity matrix, and $\mathbf{1}$ and $\mathbf{0}$ denote vectors of ones and zeros, respectively.
+\\~\\
+A symmetric square matrix $\mathbf{M}$ is positive definite if $\mathbf{x}^T\mathbf{Mx} > 0$ for all nonzero vectors $x$. Positive definiteness is equivalent to the condition that all eigenvalues of $\mathbf{M}$ are positive. The $\mathbf{M}$ is non-negative definite or positive semi-definite if $\mathbf{x^TMx} \geq 0$ for all nonzero vectors $\mathbf{x}$.
+\end{frame}
+%------------------------------------------------
+\begin{frame}
+\frametitle{Mathematical Review: Notation}
+The derivative of a function $f$, evaluated at $x$, is denoted $f'(x)$. When $\mathbf{x} = (x_1, \hdots, x_p)$ the \textit{gradient} of $f$ at $\mathbf{x}$
+$$ \mathbf{f}'(\mathbf{x}) = \left(\frac{df(\mathbf{x})}{dx_1}, \hdots, \frac{df(\mathbf{x})}{dx_p}\right) $$
+The \textit{Hessian matrix} for $f$ at $x$ is $f''(x)$ having $(i, j)$th element equal to $\frac{d^2f(\mathbf{x})}{(dx_i, dx_j)}$. The negative Hessian has important uses in statistical inference.
+
+\end{frame}
+%------------------------------------------------
+\begin{frame}
+\frametitle{Statistical Notation and Probability Distributions}
+\begin{tcolorbox}[colback = blue!5, colframe = blue!40!black, title = Random Variable]
+For a given space $S$ of some experiment, a random variable is any rule that associates a number with each outcome in $S$. In mathematical language, a random variable is function whose domain is the sample space, and whose range is the set of real numbers.
+\end{tcolorbox}
+Each outcome of an experiment can be associated with a number by specifying a rule of association -e.g., the number among the sample of 10 components that fail to last 1,000 hours of the total weight of baggage for a sample of 25 airlines passengers.\\
+\\~\\
+Such a rule of association is called a \textbf{random variable} – a variable because different numerical values are possible and random because the observed value depends on which of the possible experimental outcomes results.
+\end{frame}
+%------------------------------------------------
+\begin{frame}
+\frametitle{Statistical Notation and Probability Distributions}
+\begin{tcolorbox}[colback = blue!5, colframe = blue!40!black, title = Discrete Random Variable]
+A \textbf{discrete} random variable is random variable whose possible values either constitute a finite set or else, can be listed in an infinite sequence in which there is a 1st element, a 2nd element, and so on.
+\end{tcolorbox}
+\\~\\
+
+\begin{tcolorbox}[colback = blue!5, colframe = blue!40!black, title = Continuous Random Variable]
+A random variable is \textbf{continuous} if both of the following apply:
+\begin{enumerate}
+    \item{Its set of possible values consists either of all numbers in a single interval on the number line (possibly infinite in extent, e.g., from $\infty$ to $\infty$) or all numbers in a disjoint union of such intervals}
+    \item{No possible value of the variable has positive probability, that is $P(X=c)=0$ for any possible value $c$}
+\end{enumerate}
+\end{tcolorbox}
+\end{frame}
+%------------------------------------------------
+\begin{frame}
+\frametitle{Statistical Notation and Probability Distributions: \textit{Expected Values}}
+\textbf{Expected Values:} Consider a university having $15,000$ students and let $X =$ the number of courses for which a randomly selected student is registered.
+\\~\\
+Since $p(1) = 0.01$, we know that $(0.01) \cdot (15,000)=150$ of the students are registered for one course, and similarly for the other $x$ values.
+
+\begin{table}
+\begin{tabular}{c c c c c c c c}
+\toprule
+\textbf{$x$} & \textbf{$1$} & \textbf{$2$} & \textbf{$3$} & \textbf{$4$} & \textbf{$5$} & \textbf{$6$} & \textbf{$7$}\\
+\midrule
+$p(x)$ & 0.01 & 0.03 & 0.13 & 0.25 & 0.39 & 0.17 & 0.02 \\
+$R$    & 150  & 450  & 1950 & 3750 & 5850 & 2550 & 300  \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The average number of courses/student, or the average value of $X$ in the population, results from computing the total number of courses taken by all students and dividing by the total number of students.
+\\~\\
+Since each of 150 students is taking one course, these 150 contribute 150 courses to the total. Similarly, 450 students contribute 2(450) courses, and so on.
+
+\end{frame}
+%------------------------------------------------
+\begin{frame}
+\frametitle{Statistical Notation and Probability Distributions: \textit{Expected Values}}
+\textbf{Expected Values: \textit{(cont.)}}The population average value of $X$ is then
+$$ \frac{1(150) + 2(450) + 3(1950) + \hdots + 7(300)}{15000} = 4.57 $$
+An alternative expression is 
+$$ 1 \cdot p(1) + 2 \cdot p(2) + \hdots + 7 \cdot p(7) $$
+The expression above shows that to compute the population average value of $X$, we need only the possible values of X along with their probabilities. The average or mean value of $X$ is then a weighted average of the possible values $1, 2, \hdots, 7$ where the weights are the probabilities of those values. 
+\end{frame}
+%------------------------------------------------
+\begin{frame}
+\frametitle{Statistical Notation and Probability Distributions: \textit{Expected Values}}
+\begin{tcolorbox}[colback = blue!5, colframe = blue!40!black, title = Expected Values]
+Let $x$ be a \textbf{discrete} random variable with set of possible values $D$ and $p(x)$. The expected value or mean value of $X$, is denoted by $E(X)$ or $\mu_x$ is 
+$$ E(X) = \mu_x = \sum_{x \in D} x \cdot p(x) $$
+\end{tcolorbox}
+\end{frame}
+%------------------------------------------------
+\begin{frame}
+\frametitle{Discrete: Binomial Probability Distribution}
+\textbf{Binomial Random Variable and Distribution:} In most binomial experiments, it is the total number of $S$, rather than knowledge of exactly which trials yielded S, that is of interest.
+\\~\\
+\textbf{Definition:} The binomial random variable $X$ associated with a binomial experiment consisting of $n$ trials is defined as
+$$ X = \text{number of S among the } n \text{ trails} $$
+Suppose, for example, that $n=3$. Then there are eight possible outcomes for the experiment:
+$$ {SSS, SSF, SFS, SFF, FSS, FSF, FFS, FFF} $$
+\\~\\
+From the definition of $X$, $X(SSF)=2$, $X(SFF)=1$, and so on.
+\\~\\
+Possible values for $X$ in an $n$-trial experiment are $x=0,1,2, \hdots,n$.
+\\~\\
+We will often write $X \sim Bin (n,p)$ to indicate that $X$ is a binomial random variable based on $n$ trials with success probability $p$.
+\end{frame}
+%------------------------------------------------
+\begin{frame}
+\frametitle{Discrete: Binomial Probability Distribution}
+\begin{tcolorbox}[colback = blue!5, colframe = blue!40!black, title = Definition]
+\textbf{Binomial Random Variable and Distribution:} The probability mass function (PMF) of a binomial random variable $x$ depends on the two parameters $n$ and $p$, we denote the PMF by $b(x; n, p)$.
+$$ b(x; n, p) = \binom{n}{x} p^x \cdot (1-p)^{n-x} $$
+where $x = 0, 1, 2, \hdots, n$, $n$ is the number of trails, and $p$ is the success probability. 
+\end{tcolorbox}
+\end{frame}
+%------------------------------------------------
+\begin{frame}
+\frametitle{Discrete: Binomial Probability Distribution}
+\textbf{Example:} Each of the 6 randomly selected cola drinkers is given a glass containing cola $S$ and 1 containing cola $F$. The glasses are identical in appearance except for a code on the bottom to identify the cola. Suppose there is actually no tendency among cola drinkers to prefer one cola to the other. 
+\\~\\
+Find the probability that
+\begin{enumerate}
+    \item{Exactly 3 drinkers prefer cola S}
+    \item{At least 3 drinkers prefer cola S}
+    \item{At most 1 drinker prefers cola S}
+\end{enumerate}
+\end{frame}
+%------------------------------------------------
+\begin{frame}
+\frametitle{Discrete: Binomial Probability Distribution}
+\textbf{Solution:} Each of the 6 randomly selected cola drinkers is given a glass containing cola $S$ and 1 containing cola $F$. The glasses are identical in appearance except for a code on the bottom to identify the cola. Suppose there is actually no tendency among cola drinkers to prefer one cola to the other. 
+\\~\\
+Find the probability that
+\begin{enumerate}
+    \item{Exactly 3 drinkers prefer cola S}
+        \subitem{$$ P(X = 3) = b(3; 6, 0.5) = \binom{6}{3}(0.5)^3(0.5)^3 = 20(0.5)^6 = 0.313 $$}
+    \item{At least 3 drinkers prefer cola S}
+        \subitem{$$ P(3 \leq X) = \sum_{x = 3}^{6} b(x; 6, 0.5) = \sum_{x=3}^{6} \binom{6}{x}(0.5)^{x}(0.5)^{6-x} = 0.656 $$}
+    \item{At most 1 drinker prefers cola S}
+\end{enumerate}
+\end{frame}
+%------------------------------------------------
+%------------------------------------------------
+\begin{frame}
+\frametitle{Discrete: Poisson Probability Distribution}
+\begin{tcolorbox}[colback = blue!5, colframe = blue!40!black, title = Definition]
+A random variable $X$ is said to have a \textbf{Poisson distribution} with parameter $\lambda, \lambda > 0$ if the probability mass function of $X$ is 
+$$ p(x; \lambda) = \frac{e^{-\lambda}\lambda^{x}}{x!} $$
+\end{tcolorbox}
+Since $\lambda$ is positive, $p(x; \lambda)>0$ for all possible $x$ values.
+\\~\\
+The Poisson distribution is a discrete probability distribution that expresses the probability of a given number of events occurring in a fixed interval of time or space if these events occur with a known constant mean rate and independently of the time since the last event.
+\\~\\
+\textbf{Assumptions:} The Poisson distribution is an appropriate model if the following assumptions are true:
+\begin{itemize}
+    \item{$x$ is the number of times an event occurs in an interval and $x$ can take values $0, 1, 2, \hdots $}
+    \item{The occurrence of one event does not affect the probability that a second event will occur. That is, events occur independently.}
+\end{itemize}
+\end{frame}
+%------------------------------------------------
+\begin{frame}
+\frametitle{Discrete: Poisson Probability Distribution}
+\textbf{Example:} On a particular river, overflow floods occur once every 100 years on average. Calculate the probability of $x = 0, 1, 2, 3, 4, 5$, or $6$ overflow floods in a 100 year interval, assuming the Poisson model is appropriate.
+\\~\\
+\textbf{Solution:} Because the average event rate is one overflow flood per 100 years (so $\lambda = 1$)
+$$ P(k \text{ overflow floods in 100 years}) = \frac{\lambda^{x}e^{-\lambda}}{x!} = \frac{(1)^{k}e^{-1}}{k!} $$
+$$ P(k = 2 \text{ overflow floods in 100 years}) = \frac{\lambda^{x}e^{-\lambda}}{x!} = \frac{(1)^{2}e^{-1}}{2!} \approx 0.184 $$
+\\~\\
+\textbf{Example:} Suppose that the number of typographical errors on a single page of the book has a Poisson distribution with parameter $\lambda = 1$. Calculate the probability that there is at least one error on this page.
+\\~\\
+\textbf{Solution:}
+$$ P{X \geq 1} = 1 - P(X = 0) = 1 - e^{-1} \approx 0.633 $$
+\end{frame}
+%------------------------------------------------
+\begin{frame}
+\frametitle{Discrete: Expectation of a Poisson Random Variable}
+\textbf{Calculate $E[X]$ if $X$ is a Poisson random variable with parameter $\lambda$.}
+\\~\\
+Recall that the Poisson distribution with parameter $\lambda$ has a probability mass function of 
+$$ p(x; \lambda) = \frac{e^{-\lambda} \lambda^{x}}{x!} $$
+To calculate the expectation of a Poisson Random Variable 
+\begin{align*}
+    E[X] &= \sum_{i = 0}^{\infty} \frac{ie^{-\lambda} \lambda^{i}}{i!} \\
+         &= \sum_{i = 0}^{\infty} \frac{e^{-\lambda}\lambda^{i}}{(i-1)!} \\
+         &= \lambda e^{-\lambda} \sum_{i = 0}^{\infty} \frac{\lambda^{i-1}}{(i-1)!} \\
+         &= \lambda e^{-\lambda} \sum_{i = 0}^{\infty} \frac{\labda^{k}}{k!} \\
+         &= \lambda e^{-\lambda} e^{\lambda} \\
+    E[X] &= \lambda \\
+\end{align*}
+\end{frame}
+%------------------------------------------------
+\begin{frame}
+\frametitle{Discrete: Expectation of a Poisson Random Variable}
+\textbf{Calculate $V[X]$ if $X$ is a Poisson random variable with parameter $\lambda$.}
+\\~\\
+We have $V[X] = E[X^2] - [E[X]]^2 $
+\begin{align*}
+    E[X^2]  &= \sum_{i = 0}^{\infty} \frac{i^2 e^{-\lambda} \lambda^{i}}{i!} 
+             = \sum_{i = 0}^{\infty} \frac{i^2 e^{-\lambda} \lambda^{i}}{(i-1)!} \\
+            &= \sum_{i = 0}^{\infty} \frac{(k+1) e^{-\lambda} \lambda^{k+1}}{k!}
+             = \lambda  \left( \sum_{i = 0}^{\infty} \frac{k e^{-\lambda} \lambda^{k}}{k!} 
+               + \sum_{i = 0}^{\infty} \frac{e^{-\lambda} \lambda^k}{k!} \right) \\
+            &= \lambda \left[ e^{-\lambda} \sum_{k=0}^{\lambda} \frac{\lambda^k}{(k-1)!} 
+               + e^{-\lambda} \sum_{k=0}^{\infty} \frac{\lambda^k}{k!} \right] \\
+            &= \lambda \left[ e^{-\lambda} \sum_{k = 0}^{\infty} \frac{\lambda \lambda^{k-1}}   {(k-1)!} + e^{-\lambda}e^{\lambda} \right] \\
+            &= \lambda \left[ \lambda e^{-\lambda} \sum_{k=0}^{\infty} \frac{\lambda^{k-1}} 
+               {(k-1)!} + 1 \right] \\
+            &= \lambda \left[ \lambda e^{-\lambda} e^{\lambda} + 1 \right] \\
+            &= \lambda [\lambda + 1]
+\end{align*}
+Since $E[X] = \lambda$, therefore, $V[X] = \lambda[\lambda + 1] - \lambda^2 = \lambda$
+\end{frame}
+%------------------------------------------------
+\begin{frame}
+\frametitle{Continuous Random Variables}
+\textbf{Continuous Random Variables}
+A random variable $X$ is continuous if
+\begin{enumerate}
+    \item{Possible values comprise either a single interval on the number line (for some $A<B$, any number $x$ between $A$ and $B$ is a possible value) or a union of disjoint intervals.}
+    \item{$P(X=c) = 0$ for any number $c$ that is a possible value of $X$.}
+\end{enumerate}
+\\~\\
+\textbf{Example:} If a chemical compound is randomly selected and its pH $X$ is determined, 
+then $X$ is a continuous random variable because any pH value between $[0, 14]$ is possible. 
+\end{frame}
+%------------------------------------------------
+%------------------------------------------------
+\begin{frame}
+\frametitle{Continuous Random Variables}
+\begin{tcolorbox}[colback = blue!5, colframe = blue!40!black, title = Probability Distribution for Continuous Variables]
+Let $X$ be a continuous random variable. Then the probability density function of $X$ is a function $f(x)$ such that for any two members $a$ and $b$ with $a \leq b$,
+$$ P(a \leq X \leq b) = \int_{a}^{b} f(x)dx $$
+\end{tcolorbox}
+That is, the probability that $X$ takes on a value in the interval $[a,b]$ is the area  above this interval and under the graph of the density function.
+\\~\\
+For $f(x)$ to be a legitimate probability density function, it must satisfy the following two conditions:
+\begin{itemize}
+    \item{$f(x) \geq 0$ for all $x$}
+    \item{$\int_{-\infty}^{\infty} f(x)d(x) = $ area under the entire graph of $f(x) = 1$}
+\end{itemize}
+\end{frame}
+%------------------------------------------------
+\begin{frame}
+\frametitle{Continuous Random Variables: Uniform Distribution}
+\textbf{Uniform Distribution} \\
+\begin{tcolorbox}[colback = blue!5, colframe = blue!40!black, title = Definition]
+A continuous random variable $X$ is said to have a \textbf{uniform distribution} on the interval $[a,b]$ if the PDF of $X$ is
+\begin{align}
+    f(x; a, b) = \frac{1}{b-a}
+\end{align}
+where $a \leq x \leq b$. 
+\end{tcolorbox}
+When $X$ is a discrete random variables, each positive value is assigned with positive probability. //
+This is not true of a continuous random variable because the area under the density curve that lies above any single value is zero:
+$$ P(X = c) = \int_{c}^{c} f(x)dx = \lim_{\epsilon \rightarrow 0} \int_{c-\epsilon}^{c+\epsilon} f(x)dx = 0 $$
+The fact that $P(X=c)=0$ when $X$ is continuous has an important practical consequence:  The probability that $X$ lies in some interval between $a$ and $b$ does not depend on whether the lower limit $a$ or the upper limit $b$ is indicated in the probability calculation:
+$$ P(a \leq X \leq b) = P(a < X < b) = {(a < X \leq b) = P(a \leq X \leq b)} $$
+\end{frame}
+%------------------------------------------------
+\begin{frame}
+\frametitle{Continuous Random Variables: Normal Distribution}
+\textbf{Normal Distribution} \\
+The normal distribution is the most important one in all of statistics. \\
+\begin{tcolorbox}[colback = blue!5, colframe = blue!40!black, title = Definition]
+A continuous random variable $X$ is said to have normal distribution with parameters $\mu$ and $\sigma$ where $-\infty < \mu < \infty$ and $\sigma > 0$, if the probability density function of $X$ is 
+$$ f_X(x) = \frac{1}{\sqrt{2\pi}\sigma} e^{\frac{-(x - \mu)^2}{2\sigma ^2}} $$
+\end{tcolorbox}
+It can be verified that the mean and variance of the normal distribution is $E[X] = \mu$ and $V(X) = \sigma^2$.\\
+\\~\\
+The normal distribution with parameter values $\mu = 0$ and $\sigma = 1$ is called the \textbf{standard normal distribution}. A random variable having a standard normal distribution is called a standard random variable and will be denoted as $Z$.
+\end{frame}
+%------------------------------------------------
+\begin{frame}
+\frametitle{Continuous Random Variables: Exponential Distribution}
+\textbf{Exponential Distribution} \\
+The family of exponential distributions provides probability models that are very widely used in engineering and science disciplines.
+\begin{tcolorbox}[colback = blue!5, colframe = blue!40!black, title = Definition]
+The $X$ is said to be an exponential distribution with parameter $\lambda$ ($\lambda > 0$) if the probability density function of $X$ is
+$$ f_X(x) = \lambda e^{-\lambda x} $$
+\end{tcolorbox}
+The mean and variance are as follows: $\mu = \frac{1}{\lambda}$ and $\sigma^2 = \frac{1}{\lambda^2}$
+\\~\\
+The importance of the exponential distribution is based on the fact that it is the only continuous distribution that possess the \textbf{memory less property}.
+\end{frame}
+%------------------------------------------------
+\begin{frame}
+\frametitle{Continuous Random Variables: Exponential Distribution}
+\textbf{Markov Property (Memoryless)} \\
+\begin{tcolorbox}[colback = blue!5, colframe = blue!40!black, title = Memoryless Property]
+$$ P(\tau \leq t_0 + t | \tau > t_0) = P(\tau \leq t) $$
+\end{tcolorbox}
+\textbf{Proof} 
+\begin{align*}
+     P(\tau \leq t_0 + t | \tau > t_0) &= P(\tau \leq t) \\
+     &= \frac{P(t_0 < \tau \leq t_0 + t)}{P(\tau > t_0)} \\
+     &= \frac{\int_{t_0}^{t_0+1} \lambda e^{-\lambda t} dt}{\int_{t_0}^{\infty} \lambda e^{-\lambda t} dt} \\
+     &= \frac{-e^{-\lambda (t+t_0)} + e^{-\lambda (t+t_0)}}{e^{-\lambda t_0}} \\
+     &= 1 - e^{-\lambda t} = P(\tau \leq t)
+\end{align*}
+Previous history does not help in predicting the future. Distribution of the time until the next arrival is independent of when the last arrival occurred.
+\end{frame}
+%------------------------------------------------
+\begin{frame}
+\frametitle{Continuous Random Variables: Gamma Distribution}
+To define the family of gamma distribution, we first need to introduce a  function that plays an important role in many branches of mathematics.
+\begin{tcolorbox}[colback = blue!5, colframe = blue!40!black, title = Definition]
+For $\alpha > 0$, the gamma function $\Gamma(\alpha)$ is defined by 
+$$ \Gamma(\alpha) = \int_{0}^{\infty} x^{\alpha - 1}e^{-x} dx $$
+\end{tcolorbox}
+The most important properties of the gamma functions are the following: \\
+\begin{enumerate}
+    \item{For any $\alpha > 1$, $\Gamma(\alpha) = (\alpha - 1) \cdot \Gamma(\alpha - 1)$}
+    \item{For any positive integers $n$, $\Gamma(n) = (n-1)!$}
+    \item{$\Gamma(\frac{1}{2}) = \sqrt{\pi}$}
+\end{enumerate}
+\end{frame}
+%------------------------------------------------
+\begin{frame}
+\frametitle{Continuous Random Variables: Gamma Distribution}
+\begin{tcolorbox}[colback = blue!5, colframe = blue!40!black, title = Definition]
+A continuous random variable $X$ is called to have a \textbf{gamma distribution} if the probability density function of $X$ is
+$$ f_X(x) = \frac{x^{\alpha - 1} e^{-\frac{x}{\beta}}}{\beta^{\alpha} \Gamma(\alpha)} $$
+where the parameters $\alpha$ and $\beta$ satisfy $\alpha > 0, \beta > 0$.
+\end{tcolorbox}
+The \textbf{standard gamma distribution} has $\beta = 1$, so the probability density function of a standard gamma random variable is given by
+$$ f_X(x) = \frac{x^{\alpha - 1} e^{-x}}{\Gamma(\alpha)} $$
+The mean and variance of a random variable $X$ having a gamma distribution $f_X(x)$ are $E[X] = \mu = \alpha \beta$ and $V(X) = \gamma^2 = \alpha \beta^2$
+\end{frame}
+%------------------------------------------------
+\begin{frame}
+\frametitle{Continuous Random Variables: Chi-squared Distribution}
+The chi-squared distribution is important because it is the basis for a number of procedures in statistical inference. The central role played by the chi-squared distribution in inference springs from its relationship to normal distributions.
+\begin{tcolorbox}[colback = blue!5, colframe = blue!40!black, title = Definition]
+Let $v$ be a positive integer. A continuous random variable $X$ is called to have a \textbf{chi-squared distribution} if the probability density function of $X$ is the gamma density with $\alpha = \frac{v}{2}$ and $\beta = 2$. The probability density function of a chi-squared random variable is thus
+$$ f_X(x) = \frac{1}{2^{v/2} \Gamma(v\2)} \cdot x^{(\frac{v}{2})-1}e^{\frac{-x}{2}} $$
+where the parameter $v$ is called the \textbf{degrees of freedom} of $X$. The symbol $\chi^2$ is often used in place of \textit{chi-squared.}
+\end{tcolorbox}
+\end{frame}
+%------------------------------------------------
+\begin{frame}
+\frametitle{Continuous Random Variables: Beta Distribution}
+All families of continuous distributions discussed so far except for the uniform distribution have positive density over an infinite interval (though typically the density function decreases rapidly to zero beyond a few standard deviations from the mean).
+\begin{tcolorbox}[colback = blue!5, colframe = blue!40!black, title = Definition]
+A continuous random variable $X$ is called to have a \textbf{beta distribution} with parameters $\alpha > 0$ and $\beta > 0$, $A$ and $B$ if the probability density function of $X$ is
+$$ f_X(x) = \frac{1}{B - A} \cdot \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha)\Gamma(\beta)} \cdot \left( \frac{x - A}{x - B} \right) ^ {\alpha - 1} \cdot \left( \frac{B - x}{B - A} \right) ^ {\beta - 1}$$
+\end{tcolorbox}
+The beta distribution provides positive density only for $X$ in an interval of finite length.
+\\~\\
+The standard beta distribution is commonly used to model variation in the proportion or percentage of a quantity occurring in different samples, such as 
+the proportion of a 24-hour day that an individual is asleep or the proportion of a certain element in a chemical compound.
+\end{frame}
+%------------------------------------------------
+\end{document}
